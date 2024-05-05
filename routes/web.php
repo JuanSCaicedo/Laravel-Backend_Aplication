@@ -19,4 +19,4 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::resource('clientes', 'App\Http\Controllers\ClienteController');
+Route::resource('clientes', 'App\Http\Controllers\ClienteController')->middleware('cors');

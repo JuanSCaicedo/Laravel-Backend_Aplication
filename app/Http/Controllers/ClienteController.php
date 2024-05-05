@@ -9,11 +9,11 @@ class ClienteController extends Controller
 {
     public function index()
     {
-        // Tu lógica para obtener la lista de clientes
+         // Tu lógica para obtener la lista de clientes
         $clientes = Cliente::all();
 
         // Agrega las cabeceras CORS manualmente a la respuesta
-        return response()->json($clientes)->header('Access-Control-Allow-Origin', '*');
+        return response()->json($clientes);
     }
 
     public function store(Request $request)
