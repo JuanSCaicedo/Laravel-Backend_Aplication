@@ -2,27 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cliente;
 use Illuminate\Http\Request;
 
-class ClienteController extends Controller
+class WaController extends Controller
 {
-    public function index(Request $request)
+    public function envia()
     {
-        $query = $request->input('buscar', ''); // Obtener el parámetro de búsqueda
-        return response()->json(Cliente::search($query));
-    }
-
-    public function store(Request $request)
-    {
-
         //Token de meta
         $accessToken = 'EAAaDCZChZBmcgBOZCIL4nAdMvgu9dPfQZC51gtN5dSw2NXE0cUjj4me9nl8IeX0G5AsH2KyP1YPZAdJyHpuJR1oKprzuRUQl8xFEawJScBZBMHITfpE7Y2505vkNxq4Nx8gan1GAVjwCXGTFSOwFBQ05UYd3gXoMJ15f1PtO3RVg8LCjjSSW8YICde23117cMZC';
-        $recipientPhone = '573002474532'; // Reemplazar con el número de teléfono del destinatario en formato internacional
-        $nombre = $request->input('nombre');
-        $apellido = $request->input('apellido');
-        $nacimiento = $request->input('nacimiento');
-        $edad = $request->input('edad');
+        $recipientPhone = '573002474532'; // Replace with the recipient's phone number in international format
+        $nombre = 'Juan Sebastian';
+        $apellido = 'Caicedo Mambuscay';
+        $nacimiento = 'OCTUBRE 15, 1998';
+        $edad = '25';
+
 
         //Url a donde se manda el mensaje
         $url = 'https://graph.facebook.com/v19.0/322693020921363/messages';
@@ -65,56 +58,52 @@ class ClienteController extends Controller
             ]
         ];
 
-        // Crear un recurso cURL
+        // Create a cURL resource
         $ch = curl_init();
 
-        // Establecer la URL de la solicitud
+        // Set the request URL
         curl_setopt($ch, CURLOPT_URL, $url);
 
-        // Establecer el método de la solicitud a POST
+        // Set the request method to POST
         curl_setopt($ch, CURLOPT_POST, true);
 
-        // Establecer los encabezados de la solicitud
+        // Set the request headers
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             "Authorization: Bearer {$accessToken}",
             "Content-Type: application/json"
         ]);
 
-        // Establecer el cuerpo de la solicitud con los datos del mensaje codificados en JSON
+        // Set the request body with JSON-encoded message data
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($messageData));
 
-        // Opcionalmente, capturar la respuesta del servidor
+        // Optionally, capture the server response
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-        // Opcionalmente, manejar posibles errores
-        // curl_setopt($ch, CURLOPT_VERBOSE, true); // Habilitar la salida detallada para depuración
-        curl_setopt($ch, CURLOPT_STDERR, fopen('php://stderr', 'w')); // Redireccionar la salida de error a un archivo
+        // Optionally, handle potential errors
+        // curl_setopt($ch, CURLOPT_VERBOSE, true); // Enable verbose output for debugging
+        curl_setopt($ch, CURLOPT_STDERR, fopen('php://stderr', 'w')); // Redirect error output to a file
 
-        // Ejecutar la solicitud cURL
+        // Execute the cURL request
         $response = curl_exec($ch);
 
-        // Cerrar el recurso cURL
+        // Close the cURL resource
         curl_close($ch);
 
-        return Cliente::create($request->all());
-    }
-
-    public function update(Request $request, string $id)
-    {
-        $clien = Cliente::findOrFail($id);
-        $clien->nombre = $request->nombre;
-        $clien->apellido = $request->apellido;
-        $clien->nacimiento = $request->nacimiento;
-        $clien->edad = $request->edad;
-
-        $clien->update();
-        return $clien;
-    }
-
-
-    public function destroy(string $id)
-    {
-        $clien = Cliente::findOrFail($id);
-        $clien->delete();
+        if ($response === false) {
+            // Handle cURL errors (e.g., network issues)
+            $error = curl_error($ch);
+            echo "cURL Error: $error\n";
+            exit(1);
+        } else {
+            // Process the server response (check for success or error codes)
+            $responseData = json_decode($response, true);
+            if (isset($responseData['error'])) {
+                // Handle Facebook Graph API errors
+                echo "Facebook Graph API Error: " . $responseData['error']['message'] . "\n";
+            } else {
+                // Success! Message sent or scheduled (process response)
+                echo "Mensaje enviado correctamente!\n";
+            }
+        }
     }
 }

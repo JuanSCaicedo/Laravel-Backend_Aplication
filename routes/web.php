@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\WaController;
 use Illuminate\Support\Facades\Route;
 
 /*
