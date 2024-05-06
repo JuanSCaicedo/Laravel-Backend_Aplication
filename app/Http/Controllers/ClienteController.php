@@ -7,13 +7,10 @@ use Illuminate\Http\Request;
 
 class ClienteController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-         // Tu lógica para obtener la lista de clientes
-        $clientes = Cliente::all();
-
-        // Agrega las cabeceras CORS manualmente a la respuesta
-        return response()->json($clientes);
+        $query = $request->input('buscar', ''); // Obtener el parámetro de búsqueda
+        return response()->json(Cliente::search($query));
     }
 
     public function store(Request $request)
