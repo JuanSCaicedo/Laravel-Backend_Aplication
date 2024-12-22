@@ -39,7 +39,7 @@ class ClienteController extends Controller
             'to' => $recipientPhone, // Aquí colocas la variable $recipientPhone si es necesario
             'type' => 'template',
             'template' => [
-                'name' => 'clientes_creados',
+                'name' => 'nuevo_registro',
                 'language' => [
                     'code' => 'es'
                 ],
