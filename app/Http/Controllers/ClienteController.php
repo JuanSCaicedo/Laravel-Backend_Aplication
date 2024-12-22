@@ -21,22 +21,22 @@ class ClienteController extends Controller
 
     public function store(Request $request)
     {
-
-        //Token de meta
-        $accessToken = 'EAANvO4HR6j4BO33BTzc1R3p3rP6ATjfDUUJwbC0v94s9artYii7ATGn7gJTSQzIkGzuC7RYH786l2g8nsoUGOEvUgeTsWxJbbKb3VqXfU97CbLAmARiS0ZCmE7DaCJ9gN2kZAhXv2zJTMlvDqt5iZAiROiygvUfyoF13dIyZBvRV4Y9Vziab6zpOUyxTXdJODgZDZD';
-        $recipientPhone = '573002474532'; // Reemplazar con el número de teléfono del destinatario en formato internacional
+        // Token de meta desde el archivo .env
+        $accessToken = env('WHATSAPP_ACCESS_TOKEN');
+        $recipientPhone = env('WHATSAPP_RECIPIENT_PHONE'); // Obtener el número de teléfono del archivo .env
+    
         $nombre = $request->input('nombre');
         $apellido = $request->input('apellido');
         $nacimiento = $request->input('nacimiento');
         $edad = $request->input('edad');
-
-        //Url a donde se manda el mensaje
+    
+        // URL a donde se manda el mensaje
         $url = 'https://graph.facebook.com/v21.0/316855561507121/messages';
-
+    
         // Configuración del mensaje
         $messageData = [
             'messaging_product' => 'whatsapp',
-            'to' => $recipientPhone, // Aquí colocas la variable $recipientPhone si es necesario
+            'to' => $recipientPhone,
             'type' => 'template',
             'template' => [
                 'name' => 'nuevo_registro',
@@ -47,63 +47,64 @@ class ClienteController extends Controller
                     [
                         'type' => 'body',
                         'parameters' => [
-                            [
-                                'type' => 'text',
-                                'text' => $nombre
-                            ],
-                            [
-                                'type' => 'text',
-                                'text' => $apellido
-                            ],
-                            [
-                                'type' => 'date_time',
-                                'date_time' => [
-                                    'fallback_value' => $nacimiento
-                                ]
-                            ],
-                            [
-                                'type' => 'text',
-                                'text' => $edad
-                            ]
+                            ['type' => 'text', 'text' => $nombre],
+                            ['type' => 'text', 'text' => $apellido],
+                            ['type' => 'date_time', 'date_time' => ['fallback_value' => $nacimiento]],
+                            ['type' => 'text', 'text' => $edad]
                         ]
                     ]
                 ]
             ]
         ];
-
+    
         // Crear un recurso cURL
         $ch = curl_init();
-
+    
         // Establecer la URL de la solicitud
         curl_setopt($ch, CURLOPT_URL, $url);
-
+    
         // Establecer el método de la solicitud a POST
         curl_setopt($ch, CURLOPT_POST, true);
-
+    
         // Establecer los encabezados de la solicitud
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             "Authorization: Bearer {$accessToken}",
             "Content-Type: application/json"
         ]);
-
+    
         // Establecer el cuerpo de la solicitud con los datos del mensaje codificados en JSON
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($messageData));
-
+    
         // Opcionalmente, capturar la respuesta del servidor
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-        // Opcionalmente, manejar posibles errores
-        // curl_setopt($ch, CURLOPT_VERBOSE, true); // Habilitar la salida detallada para depuración
-        curl_setopt($ch, CURLOPT_STDERR, fopen('php://stderr', 'w')); // Redireccionar la salida de error a un archivo
-
+    
         // Ejecutar la solicitud cURL
         $response = curl_exec($ch);
-
+    
+        // Verificar si hay un error en la solicitud
+        if(curl_errno($ch)) {
+            // Manejar el error
+            $error_message = curl_error($ch);
+            curl_close($ch);
+            return response()->json(['error' => $error_message], 500);
+        }
+    
         // Cerrar el recurso cURL
         curl_close($ch);
-
-        return Cliente::create($request->all());
+    
+        // Procesar la respuesta, si es necesario
+        $responseData = json_decode($response, true);
+        if (isset($responseData['error'])) {
+            return response()->json(['error' => $responseData['error']['message']], 500);
+        }
+    
+        // Crear el cliente con los datos del formulario
+        Cliente::create($request->all());
+    
+        // Responder con un mensaje de éxito
+        return response()->json(['message' => 'Mensaje enviado y cliente creado con éxito'], 200);
     }
+    
 
     public function update(Request $request, string $id)
     {
