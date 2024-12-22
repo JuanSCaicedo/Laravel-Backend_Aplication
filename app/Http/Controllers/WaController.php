@@ -9,12 +9,12 @@ class WaController extends Controller
     public function envia()
     {
         //Token de meta
-        $accessToken = 'EAANvO4HR6j4BO33BTzc1R3p3rP6ATjfDUUJwbC0v94s9artYii7ATGn7gJTSQzIkGzuC7RYH786l2g8nsoUGOEvUgeTsWxJbbKb3VqXfU97CbLAmARiS0ZCmE7DaCJ9gN2kZAhXv2zJTMlvDqt5iZAiROiygvUfyoF13dIyZBvRV4Y9Vziab6zpOUyxTXdJODgZDZD';
-        $recipientPhone = '573002474532'; // Replace with the recipient's phone number in international format
+        $accessToken = 'WHATSAPP_ACCESS_TOKEN';
+        $recipientPhone = 'WHATSAPP_RECIPIENT_PHONE'; // Replace with the recipient's phone number in international format
         $nombre = 'Juan Sebastian';
         $apellido = 'Caicedo Mambuscay';
-        $nacimiento = 'OCTUBRE 15, 1998';
-        $edad = '25';
+        $nacimiento = 'OCTUBRE 15, 2020';
+        $edad = '16';
 
 
         //Url a donde se manda el mensaje
