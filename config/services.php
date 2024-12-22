@@ -35,6 +35,6 @@ return [
         'access_token' => env('WHATSAPP_ACCESS_TOKEN'),
         'recipient_phone' => env('WHATSAPP_RECIPIENT_PHONE'),
         'business_account_id' => env('WHATSAPP_BUSINESS_ACCOUNT_ID'),
-        'api_version' => env('WHATSAPP_API_VERSION', 'v19.0'),
+        'api_version' => env('WHATSAPP_API_VERSION', 'v21.0'),
     ],
 ];
