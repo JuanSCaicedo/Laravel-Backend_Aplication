@@ -26,7 +26,7 @@ class WaController extends Controller
             'to' => $recipientPhone, // Aquí colocas la variable $recipientPhone si es necesario
             'type' => 'template',
             'template' => [
-                'name' => 'clientes_creados',
+                'name' => 'hello_world',
                 'language' => [
                     'code' => 'es'
                 ],
