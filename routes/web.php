@@ -18,6 +18,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/envia', [WaController::class, 'envia']);
+
 Auth::routes();
 
 Route::resource('clientes', 'App\Http\Controllers\ClienteController')->middleware('cors');
