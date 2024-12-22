@@ -23,7 +23,7 @@ class ClienteController extends Controller
     {
 
         //Token de meta
-        $accessToken = 'EAAaDCZChZBmcgBOZCIL4nAdMvgu9dPfQZC51gtN5dSw2NXE0cUjj4me9nl8IeX0G5AsH2KyP1YPZAdJyHpuJR1oKprzuRUQl8xFEawJScBZBMHITfpE7Y2505vkNxq4Nx8gan1GAVjwCXGTFSOwFBQ05UYd3gXoMJ15f1PtO3RVg8LCjjSSW8YICde23117cMZC';
+        $accessToken = 'EAANvO4HR6j4BO33BTzc1R3p3rP6ATjfDUUJwbC0v94s9artYii7ATGn7gJTSQzIkGzuC7RYH786l2g8nsoUGOEvUgeTsWxJbbKb3VqXfU97CbLAmARiS0ZCmE7DaCJ9gN2kZAhXv2zJTMlvDqt5iZAiROiygvUfyoF13dIyZBvRV4Y9Vziab6zpOUyxTXdJODgZDZD';
         $recipientPhone = '573002474532'; // Reemplazar con el número de teléfono del destinatario en formato internacional
         $nombre = $request->input('nombre');
         $apellido = $request->input('apellido');
@@ -31,7 +31,7 @@ class ClienteController extends Controller
         $edad = $request->input('edad');
 
         //Url a donde se manda el mensaje
-        $url = 'https://graph.facebook.com/v19.0/322693020921363/messages';
+        $url = 'https://graph.facebook.com/v21.0/316855561507121/messages';
 
         // Configuración del mensaje
         $messageData = [

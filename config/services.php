@@ -31,4 +31,10 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'whatsapp' => [
+        'access_token' => env('WHATSAPP_ACCESS_TOKEN'),
+        'recipient_phone' => env('WHATSAPP_RECIPIENT_PHONE'),
+        'business_account_id' => env('WHATSAPP_BUSINESS_ACCOUNT_ID'),
+        'api_version' => env('WHATSAPP_API_VERSION', 'v19.0'),
+    ],
 ];
