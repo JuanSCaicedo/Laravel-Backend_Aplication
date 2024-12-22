@@ -9,8 +9,14 @@ class ClienteController extends Controller
 {
     public function index(Request $request)
     {
-        $query = $request->input('buscar', ''); // Obtener el parámetro de búsqueda
-        return response()->json(Cliente::search($query));
+        $query = $request->input('buscar', '');
+        
+        $clientes = Cliente::query()
+            ->where('nombre', 'LIKE', "%{$query}%")
+            // o cualquier otra condición de búsqueda
+            ->paginate(10);
+        
+        return response()->json($clientes);
     }
 
     public function store(Request $request)
@@ -110,7 +116,6 @@ class ClienteController extends Controller
         $clien->update();
         return $clien;
     }
-
 
     public function destroy(string $id)
     {
